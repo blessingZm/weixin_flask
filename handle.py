@@ -48,5 +48,4 @@ def Post(receiveXml):
         reply = ArticlesReply(message=receiveXml, articles=replyMsg)
     # 转换成 XML
     replyXml = reply.render()
-
     return replyXml
