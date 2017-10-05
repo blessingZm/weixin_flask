@@ -6,20 +6,23 @@ import requests
 import sqlite3
 from datetime import datetime, timedelta
 import pandas as pd
-from wechatpy.replies import TextReply
+import re
 
 
+# 文字匹配规则
+re_text =re.compile(u"[\u4e00-\u9fa5]+")
+re_datetime = re.compile('\d{10}')
 timeText = ['1', '12', '24']
 
 class replyRain:
-    def __init__(self, receivemsg):
-        self.receivemsg = receivemsg
+    def __init__(self, content):
+        self.content = content
 
     # 从传来的消息中分离地区和时间
     def get_country_rawtime(self):
-        content = self.receivemsg.content.replace('雨量', '')
-        country = content.split()[0]
-        rawTime = content.split()[1]
+        Content = self.content.replace('雨量', '')
+        country = re.findall(re_text, Content)[0]
+        rawTime = re.findall(re_datetime, Content)[0]
         return country, rawTime
 
     def read_code(self):
@@ -84,19 +87,15 @@ class replyRain:
             i += 1
         return stDatas
 
-    def getdata(self):
+    def getRain(self):
         try:
             country, rawTime = self.get_country_rawtime()
         except:
-            return '请输入正确的雨量查询格式，县/区名+空格+年月日时+雨量,' \
-                   '注意县/区名与时间之间有一个空格'
+            return "请输入地名+年月日时+雨量，注意时间格式！"
         year = rawTime[0: 4]
         month = rawTime[4: 6]
         day = rawTime[6: 8]
         hour = rawTime[8: 10]
-        if len(rawTime) is not 10:
-            return "请输入正确的查询时间，即年月日时"
-
         nowTime = datetime.strftime(datetime.today(), '%Y%m%d%H')
         if rawTime > nowTime or rawTime < '2016123108':
             return "请注意查询时间{}/{}/{} {}时（未到或早于2016/12/31）".format(year, month, day, hour)
@@ -121,11 +120,3 @@ class replyRain:
             msgDatas.append(str(buffData.name) + ":")
             msgDatas.append(' '*8 + buffDataR)
         return '\n'.join(msgDatas)
-
-    # 数据转为可回复的xml格式
-    def replyMsg(self):
-        msg = self.getdata()
-        reply = TextReply(content='{}'.format(msg), message=self.receivemsg)
-        # 转换成 XML
-        xml = reply.render()
-        return xml

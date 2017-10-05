@@ -4,7 +4,7 @@
 from wechatpy.replies import TextReply
 
 
-def replyFunction(receivemsg):
+def replyFunction():
     msg = "本订阅号功能参数为：\n" \
           "（1）回复“功能”，查看本订阅号详细功能参数；\n" \
           "（2）回复“地区+天气”可获取未来5天天气预报，如“宜昌天气”；\n" \
@@ -20,9 +20,4 @@ def replyFunction(receivemsg):
           "（6）回复其他信息或语音，与机器人（ZM助手）聊天；\n" \
           "（7）回复人物图片，智能识别人物性别与年龄（仅供娱乐）\n\n\n" \
           " 请注意：(5)(6)的回复内容为链接，只能在有湖北内网的情况下打开....."
-
-    # 数据转为可回复的xml格式
-    reply = TextReply(content='{}'.format(msg), message=receivemsg)
-    # 转换成 XML
-    xml = reply.render()
-    return xml
+    return msg

@@ -1,21 +1,16 @@
 """
 根据“天气+地区”从中国天气回复天气查询图文消息
 """
-from wechatpy.replies import ArticlesReply, TextReply
 import requests
 
 
 class replyForecastChina:
-    def __init__(self, receivemsg):
-        self.receivemsg = receivemsg
-        self.city = receivemsg.content.replace('天气', '')
+    def __init__(self, content):
+        self.city = content.replace('天气', '')
 
     # 获取城市对应的id
     def get_code(self):
-        try:
-            city = self.city.split()[0]
-        except:
-            return "请输入天气+查询时间"
+        city = self.city.split()[0]
         code = {}
         url = 'https://api.heweather.com/v5/search'
         data = {
@@ -31,13 +26,18 @@ class replyForecastChina:
         return code
 
     def getWeather(self):
+        try:
+            city = self.city.split()[0]
+        except:
+            return "请输入天气+地区"
         acticles = []
-        locCode = self.get_code()
+        try:
+            locCode = self.get_code()
+        except:
+            return '未查询到地名：{},请重新查询！'.format(city)
+
         if not isinstance(locCode, dict):
             return locCode
-        city = self.city.split()[0]
-        if len(locCode.keys()) < 1:
-            return '未查询到{},请重新输入！'.format(city)
         elif len(locCode.keys()) > 1:
             return '查询到多个{0}, 请精确到县/区\n' \
                    '查询到的{0}有：\n{1}'.format(city, ', '.join(list(locCode.keys())))
@@ -51,15 +51,3 @@ class replyForecastChina:
                 acticles.append({'title': title, 'description': description,
                                  'url': weatherUrl[i], 'image': imgUrl[i]})
             return acticles
-
-    # 数据转为可回复的xml格式
-    def replyMsg(self):
-        msg = self.getWeather()
-        # print(msg)
-        if not isinstance(msg, list):
-            reply = TextReply(content='{}'.format(msg), message=self.receivemsg)
-        else:
-            reply = ArticlesReply(message=self.receivemsg, articles=msg)
-        # 转换成 XML
-        xml = reply.render()
-        return xml

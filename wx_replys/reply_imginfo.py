@@ -2,10 +2,9 @@
 # 回复人物图片消息，自动识别性别和年龄
 import requests
 import re
-from wechatpy.replies import TextReply
 
 
-def replyImginfo(receivemsg, picurl):
+def replyImginfo(picurl):
     s = requests.session()
     url = 'https://how-old.net/Home/Analyze?isTest=False&source=&version=how-old.net'
     header = {
@@ -31,9 +30,4 @@ def replyImginfo(receivemsg, picurl):
         msg = '图中人物性别为:' + datas[0] + '\n' + '年龄为:' + datas[1]
     except:
         msg = '识别失败，换张图片试试吧'
-
-    # 数据转为可回复的xml格式
-    reply = TextReply(content='{}'.format(msg), message=receivemsg)
-    # 转换成 XML
-    xml = reply.render()
-    return xml
+    return msg

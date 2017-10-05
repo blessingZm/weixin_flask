@@ -36,15 +36,13 @@ def we_chat():
             return make_response(echostr)
     else:
         # 获取接收的信息
-        # 接收的xml数据，用于获取wechatpy解析后不包含的内容
+        # 接收的xml数据
         rec = request.stream.read()
         # wechatpy解析后的数据，用于wechatpy的消息回复
-        msg = parse_message(rec)
-        # 用户id
-        userid = msg.source[0: 15]
+        receive_xml = parse_message(rec)
         # 取得解析信息后准备传回的xml信息
-        xml = Post(rec, msg, userid)
-        return make_response(xml)
+        reply_xml = Post(receive_xml)
+        return make_response(reply_xml)
 
 
 if __name__ == '__main__':
