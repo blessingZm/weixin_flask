@@ -8,7 +8,7 @@ def replyTulin(to_user, receiveData):
     yield None
     msg_content, is_replay = yield None
 
-    content, is_replay = yield ('TextMsg', '当前为机器人聊天模式，输入9退出当前模式，'
+    content, is_replay = yield ('TextMsg', '当前为机器人聊天模式，，需要退出机器人聊天模式时请输入：9\n\n'
                                            '开始随便聊聊吧....')
     while True:
         if content == '9':

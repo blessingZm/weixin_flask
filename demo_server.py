@@ -1,6 +1,6 @@
 """
 demo_server, demo_dialog, wechat/, demo_dialog_reply/
-实现根据上下文对话
+实现根据上下文对话，主要模块在wechat/, 处理函数在demo_dialog_reply/
 """
 
 import logging

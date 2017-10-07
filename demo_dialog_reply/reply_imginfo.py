@@ -32,5 +32,5 @@ def replyImginfo(to_user, receiveData):
         datas = [gender1, age.group(1)]
         msg = '图中人物性别为:' + datas[0] + '\n' + '年龄为:' + datas[1]
     except:
-        msg = '识别失败，换张图片试试吧'
+        msg = '识别失败，换张图片试试吧!'
     return ('TextMsg', msg)

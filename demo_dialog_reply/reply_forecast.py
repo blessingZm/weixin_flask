@@ -6,7 +6,8 @@ import requests
 def replyForecast(to_user, receiveData):
     yield None
     msg_content, is_replay = yield None
-    location, is_replay = yield ('TextMsg', '当前为天气查询模式！\n请输入要查询的城市：')
+    location, is_replay = yield ('TextMsg', '当前为天气查询模式，需要退出天气查询模式时请输入：9'
+                                            '\n\n请输入要查询的城市：')
     while True:
         if location == '9':
             return ('TextMsg', '退出天气预报查询模式，'
@@ -31,5 +32,5 @@ def replyForecast(to_user, receiveData):
             location, is_replay = yield ('TextMsg', msg + '\n\n退出天气查询请输入：9\n'
                                                           '继续查询请输入要查询的城市：')
         except:
-            location, is_replay = yield ('TextMsg', '未查询到城市{},'
+            location, is_replay = yield ('TextMsg', '未查询到城市{}!\n'
                                                     '请重新输入要查询的城市：'.format(location))

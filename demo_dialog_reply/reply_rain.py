@@ -72,7 +72,7 @@ def replyRain(to_user, receiveData):
     yield None
     msg_content, is_replay = yield None
 
-    country, is_replay = yield ('TextMsg', '当前为雨量查询模式\n'
+    country, is_replay = yield ('TextMsg', '当前为雨量查询模式，需要退出雨量查询模式时请输入：9\n\n'
                                            '请输入要查询的县/区：')
     while True:
         try:
@@ -84,7 +84,7 @@ def replyRain(to_user, receiveData):
             if code == '9':
                 return ('TextMsg', '退出雨量查询模式，'
                                    '开始新的会话模式请输入对应的数字进入！')
-            rawTime, is_replay = yield ('TextMsg', '查询地区为：{}，'
+            rawTime, is_replay = yield ('TextMsg', '查询地区为：{}\n'
                                                    '请输入要查询的时间：'.format(country))
             while True:
                 if rawTime == '9':
@@ -96,12 +96,12 @@ def replyRain(to_user, receiveData):
                 hour = rawTime[8: 10]
                 nowTime = datetime.strftime(datetime.today(), '%Y%m%d%H')
                 if len(rawTime) < 10:
-                    rawTime, is_replay = yield ('TextMsg', "请输入正确的时间格式：年月日时\n"
+                    rawTime, is_replay = yield ('TextMsg', "请输入正确的时间格式：年月日时！\n"
                                                            "请重新输入查询时间：")
                     continue
                 elif rawTime > nowTime or rawTime < '2016123108':
                     rawTime, is_replay = yield ('TextMsg', "请检查查询时间{}/{}/{} {}时"
-                                                           "（未到或早于2016/12/31）\n"
+                                                           "（未到或早于2016/12/31）！\n"
                                                            "请重新输入查询时间：".format(year, month, day, hour))
                     continue
 
@@ -119,7 +119,7 @@ def replyRain(to_user, receiveData):
             else:
                 rawDatas = pd_R_datas.iloc[1: maxNum + 1]
             if not len(rawDatas):
-                country, is_replay = yield ('TextMsg', '内网未查询到{}的区域站雨量，地名请精确至县/区\n'
+                country, is_replay = yield ('TextMsg', '内网未查询到{}的区域站雨量，地名请精确至县/区！\n\n'
                                                        '请重新输入查询县/区：'.format(country))
             else:
                 for i in range(len(rawDatas)):
@@ -129,4 +129,4 @@ def replyRain(to_user, receiveData):
                     msgDatas.append(' ' * 8 + buffDataR)
                 msg = '\n'.join(msgDatas)
                 country, is_replay = yield ('TextMsg', msg + '\n\n退出雨量查询请输入：9\n'
-                                                          '继续查询请输入要查询的县/区：')
+                                                             '继续查询请输入要查询的县/区：')
