@@ -4,7 +4,10 @@ import requests
 import re
 
 
-def replyImginfo(picurl):
+def replyImginfo(to_user, receiveData):
+    yield None
+    msg_content, is_replay = yield None
+
     s = requests.session()
     url = 'https://how-old.net/Home/Analyze?isTest=False&source=&version=how-old.net'
     header = {
@@ -15,7 +18,7 @@ def replyImginfo(picurl):
         'X-Requested-With': "XMLHttpRequest"
     }
 
-    data = {'file': s.get(picurl).content}
+    data = {'file': s.get(receiveData).content}
     try:
         r = s.post(url, files=data, headers=header)
         h = str(r.content)
@@ -30,4 +33,4 @@ def replyImginfo(picurl):
         msg = '图中人物性别为:' + datas[0] + '\n' + '年龄为:' + datas[1]
     except:
         msg = '识别失败，换张图片试试吧'
-    return msg
+    return ('TextMsg', msg)
