@@ -1,13 +1,6 @@
 # -*- coding: utf-8 -*-
-from demo_dialog_reply.reply_event import replyWelcome
-from demo_dialog_reply.reply_function import replyFunction
-from demo_dialog_reply.reply_forecast import replyForecast
-from demo_dialog_reply.reply_rain import replyRain
-from demo_dialog_reply.reply_tulin import replyTulin
-from demo_dialog_reply.reply_imginfo import replyImginfo
-from demo_dialog_reply.get_rain import get_rain
-from demo_dialog_reply.get_forecast import get_weather
-
+# 从 __init__ 导入ROUTER中的所有处理函数
+from __init__ import *
 
 # REDIS 配置，请自行替换
 REDIS_HOST = '127.0.0.1'
