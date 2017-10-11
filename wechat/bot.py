@@ -54,7 +54,7 @@ def _new_dialog(msg_type, msg_content, to_user):
     for pattern, dialog_name in router:
         regex = re.compile(pattern)
         if regex.match(msg_content):
-            dialog = getattr(dialog_module, dialog_name)(to_user, receiveData = msg_content)
+            dialog = getattr(dialog_module, dialog_name)(to_user, receiveData=msg_content)
             break
     else:
         raise Exception('Router not found')
@@ -91,13 +91,14 @@ def answer(data, module):
     # print(msg_content)
     
     # Initialize environment
+    # 在调用时，dialog_module即为demo_dialog.py
     global dialog_module
     dialog_module = module
     global hkey
     hkey = dialog_module.REDIS_KEY % {'open_id': to_user}
     global redis_db
     redis_db = StrictRedis(
-        host=dialog_module.REDIS_HOST, 
+        host=dialog_module.REDIS_HOST,
         port=dialog_module.REDIS_PORT, 
         password=dialog_module.REDIS_PASSWORD,
         db=0

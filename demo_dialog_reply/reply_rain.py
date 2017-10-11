@@ -85,7 +85,7 @@ def replyRain(to_user, receiveData):
                 return ('TextMsg', '退出雨量查询模式，'
                                    '开始新的会话模式请输入对应的数字进入！')
             rawTime, is_replay = yield ('TextMsg', '查询地区为：{}\n'
-                                                   '请输入要查询的时间：'.format(country))
+                                                   '请输入要查询的时间，年月日时：'.format(country))
             while True:
                 if rawTime == '9':
                     return ('TextMsg', '退出当前会话，'
@@ -112,7 +112,7 @@ def replyRain(to_user, receiveData):
 
             R_datas = down_r(code, rawTime)
             if R_datas == '业务内网无法响应！':
-                return 'TextMsg', R_datas + '请稍后重新查询！'
+                return ('TextMsg', R_datas + '请稍后重新查询！')
             pd_R_datas = pd.DataFrame(R_datas).sort_values(['{}'.format(timeText[-1])], ascending=False)
             if len(pd_R_datas.index) <= maxNum:
                 rawDatas = pd_R_datas
