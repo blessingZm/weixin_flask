@@ -21,7 +21,8 @@ ROUTER = {
         ('^0$', 'replyFunction'),
         ('^1$', 'replyForecast'),
         ('^2$', 'replyRain'),
-        ('^3$', 'replyTulin'),
+        ('^3$', 'replyMinuteRain'),
+        ('^8$', 'replyTulin'),
         ('^[\u4e00-\u9fa5]+\s*天气$', 'get_weather'),
         ('^[\u4e00-\u9fa5]+\s*\d+\s*雨量$', 'get_rain'),
         ('.*', 'replyFunction')

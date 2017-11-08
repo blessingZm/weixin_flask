@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-"""根据地区及时间从湖北业务内网下载雨量"""
+"""根据地区及时间从湖北业务内网下载1h、6h、12h、24h雨量"""
 import requests
 import re
 import sqlite3
 from datetime import datetime, timedelta
 import pandas as pd
+from collections import OrderedDict
 
-timeText = ['1', '12', '24']
+timeText = ['1', '6', '12', '24']
 re_str = re.compile('^([\u4e00-\u9fa5]+)\s*(\d+)\s*雨量$')
 
 
@@ -22,9 +23,9 @@ def read_code(country):
 
 
 def down_r(insertTime, country):
-    stDatas = {}
+    stDatas = OrderedDict()
     endTime = datetime.strptime(insertTime, '%Y%m%d%H%M%S')
-    startTimes = [endTime - timedelta(hours=i) for i in [0, 11, 23]]
+    startTimes = [endTime - timedelta(hours=i) for i in [0, 5, 11, 23]]
     try:
         adminCode = read_code(country)
     except:
@@ -94,7 +95,7 @@ def get_rain(to_user, receiveData):
 
     maxNum = 30
     msgDatas = [
-        '{}--区域站{}/{}/{} {}时累计1h、12h、24h雨量:'.format(country, year, month, day, hour)]
+        '{}--区域站{}/{}/{} {}时累计1h、6h、12h、24h雨量:'.format(country, year, month, day, hour)]
     R_datas = down_r(insertTime, country)
 
     if R_datas == '未查询到地名：{}'.format(country) or \
@@ -103,7 +104,6 @@ def get_rain(to_user, receiveData):
         return ('TextMsg', msg_content)
 
     pd_R_datas = pd.DataFrame(R_datas).sort_values(['{}'.format(timeText[-1])], ascending=False)
-    pd_R_datas.columns.name = '累计时间(h)'
     if len(pd_R_datas.index) <= maxNum:
         rawDatas = pd_R_datas
     else:
@@ -113,8 +113,8 @@ def get_rain(to_user, receiveData):
     else:
         for i in range(len(rawDatas)):
             buffData = rawDatas.iloc[i]
-            buffDataR = ','.join([str(r).rjust(10) for r in buffData.values])
+            buffDataR = ','.join([str(r).rjust(8) for r in buffData.values])
             msgDatas.append(str(buffData.name) + ":")
-            msgDatas.append(' '*8 + buffDataR)
+            msgDatas.append(' '*4 + buffDataR)
         msg_content = '\n'.join(msgDatas)
     return ('TextMsg', msg_content)

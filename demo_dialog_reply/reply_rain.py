@@ -6,6 +6,7 @@ import requests
 import sqlite3
 from datetime import datetime, timedelta
 import pandas as pd
+from collections import OrderedDict
 
 
 timeText = ['1', '12', '24']
@@ -25,7 +26,7 @@ def get_code(country):
 
 def down_r(code, rawTime):
     insertTime = rawTime + '0000'
-    stDatas = {}
+    stDatas = OrderedDict()
     endTime = datetime.strptime(insertTime, '%Y%m%d%H%M%S')
     startTimes = [endTime - timedelta(hours=i) for i in [0, 11, 23]]
     url = 'http://10.104.235.5/hbzd/hbase'
