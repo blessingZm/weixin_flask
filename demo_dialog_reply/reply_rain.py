@@ -7,6 +7,7 @@ import sqlite3
 from datetime import datetime, timedelta
 import pandas as pd
 from collections import OrderedDict
+import os
 
 
 timeText = ['1', '12', '24']
@@ -15,7 +16,8 @@ def get_code(country):
     if country == '9':
         return country
     else:
-        dbName = 'coding.db'
+        codePath = os.path.abspath('.\\')
+        dbName = os.path.join(codePath, 'demo_dialog_reply', 'coding.db')
         tableName = 'coding'
         db = sqlite3.connect(dbName)
         cursor = db.cursor()

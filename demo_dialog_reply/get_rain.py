@@ -6,13 +6,15 @@ import sqlite3
 from datetime import datetime, timedelta
 import pandas as pd
 from collections import OrderedDict
+import os
 
 timeText = ['1', '6', '12', '24']
 re_str = re.compile('^([\u4e00-\u9fa5]+)\s*(\d+)\s*雨量$')
 
 
 def read_code(country):
-    dbName = 'coding.db'
+    codePath = os.path.abspath('.\\')
+    dbName = os.path.join(codePath, 'demo_dialog_reply', 'coding.db')
     tableName = 'coding'
     db = sqlite3.connect(dbName)
     cursor = db.cursor()
